@@ -1,0 +1,12 @@
+.box{
+    display: flex;
+    flex-direction: row;
+    width: 'fit-content';
+    height:93vh;
+    border: 2px solid black;
+}
+.tw{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}

@@ -11,6 +11,8 @@ namespace Chat.Models
         public int ChatId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
+        [Required]
+        public bool IsBunned { get; set; }
 
         public User User { get; set; }
         public Chat Chat { get; set; }

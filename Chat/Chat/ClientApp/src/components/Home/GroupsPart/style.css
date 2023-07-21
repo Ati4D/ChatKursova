@@ -1,0 +1,22 @@
+.gr {
+    display: flex;
+    justify-content: space-around;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    align-items: center;
+}
+.gr.pr{
+    background-color: rgb(127, 133, 223);
+}
+
+.gr img {
+    width: 50px;
+    height: fit-content;
+}
+
+.lst {
+    width: fit-content;
+    max-width: 300px;
+    height: 100%;
+}

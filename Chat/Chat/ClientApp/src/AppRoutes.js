@@ -1,19 +1,19 @@
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import AuthentificateForm from "./components/AuthentificationComponent/AuthentificateForm";
+import Home  from "./components/Home/Home";
+import Profile from "./components/ProfileComponent/Profile";
 
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <AuthentificateForm startType="log"/>
   },
   {
-    path: '/counter',
-    element: <Counter />
+    path: '/home',
+    element: <Home/>
   },
   {
-    path: '/fetch-data',
-    element: <FetchData />
+    path: '/prof',
+    element: <Profile />
   }
 ];
 

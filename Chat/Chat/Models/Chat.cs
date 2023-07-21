@@ -4,6 +4,7 @@ namespace Chat.Models
 {
     public class Chat
     {
+        [Key]
        public int Id { get; set; }
         [Required]
        public int CreatorUserId { get; set; }
@@ -17,6 +18,6 @@ namespace Chat.Models
         public DateTime CreationDate { get; set; }
 
         public List<UsersChats> UsersChats { get; set; }
-        public List<ChatsMessages> ChatsMessages { get; set; }
+        public List<Message> Messages { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chat.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230717155219_First")]
-    partial class First
+    [Migration("20230721103517_Beta1")]
+    partial class Beta1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,25 @@ namespace Chat.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Chat.Models.BlackCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("BlackCart");
+                });
 
             modelBuilder.Entity("Chat.Models.Chat", b =>
                 {
@@ -60,7 +79,7 @@ namespace Chat.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("Chat.Models.ChatsMessages", b =>
+            modelBuilder.Entity("Chat.Models.FriendList", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,19 +87,15 @@ namespace Chat.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MessageId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-                    b.HasIndex("MessageId");
-
-                    b.ToTable("ChatsMessages");
+                    b.ToTable("FriendList");
                 });
 
             modelBuilder.Entity("Chat.Models.Message", b =>
@@ -90,6 +105,9 @@ namespace Chat.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -103,6 +121,8 @@ namespace Chat.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChatId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
@@ -115,9 +135,6 @@ namespace Chat.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -167,6 +184,9 @@ namespace Chat.Migrations
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBunned")
+                        .HasColumnType("bit");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -179,32 +199,43 @@ namespace Chat.Migrations
                     b.ToTable("UsersChats");
                 });
 
-            modelBuilder.Entity("Chat.Models.ChatsMessages", b =>
+            modelBuilder.Entity("Chat.Models.BlackCart", b =>
                 {
-                    b.HasOne("Chat.Models.Chat", "Chat")
-                        .WithMany("ChatsMessages")
-                        .HasForeignKey("ChatId")
+                    b.HasOne("Chat.Models.User", "User")
+                        .WithMany("BlackCarts")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chat.Models.Message", "Message")
-                        .WithMany("ChatsMessages")
-                        .HasForeignKey("MessageId")
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Chat.Models.FriendList", b =>
+                {
+                    b.HasOne("Chat.Models.User", "User")
+                        .WithMany("friendLists")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chat");
-
-                    b.Navigation("Message");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Chat.Models.Message", b =>
                 {
+                    b.HasOne("Chat.Models.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Chat.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chat");
 
                     b.Navigation("User");
                 });
@@ -230,19 +261,18 @@ namespace Chat.Migrations
 
             modelBuilder.Entity("Chat.Models.Chat", b =>
                 {
-                    b.Navigation("ChatsMessages");
+                    b.Navigation("Messages");
 
                     b.Navigation("UsersChats");
-                });
-
-            modelBuilder.Entity("Chat.Models.Message", b =>
-                {
-                    b.Navigation("ChatsMessages");
                 });
 
             modelBuilder.Entity("Chat.Models.User", b =>
                 {
+                    b.Navigation("BlackCarts");
+
                     b.Navigation("UsersChats");
+
+                    b.Navigation("friendLists");
                 });
 #pragma warning restore 612, 618
         }

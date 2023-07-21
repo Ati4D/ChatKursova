@@ -24,10 +24,9 @@ namespace Chat.Models
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
-        public DateTime Birthday { get; set; }
-        [Required]
         public DateTime RegistrationDate { get; set; }
 
         public List<UsersChats> UsersChats { get; set; }
+        public List<FriendList> friendLists { get; set; }
     }
 }
